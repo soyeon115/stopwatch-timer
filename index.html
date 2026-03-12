@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO 최적화 태그 -->
+    <title>무료 스톱워치 & 타이머</title>
+    <meta name="description" content="무료 온라인 스톱워치와 타이머. 기록 저장, 구간 측정, 작은창 지원. 공부, 운동, 요리에 최적화된 시간 측정 도구입니다.">
+    <meta name="keywords" content="스톱워치, 타이머, 온라인 스톱워치, 무료 스톱워치, 온라인 타이머, 시간 측정, 무료 타이머, 구간 측정, 타이머 측정기, 공부 타이머, 운동 타이머">
+    <meta name="author" content="Stopwatch Timer">
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="https://example.com/"> <!--실제주소-->
+    
+    <!-- 소셜 미디어 공유 최적화 -->
+    <meta property="og:title" content="무료 스톱워치 & 타이머">
+    <meta property="og:description" content="간편하게 사용하는 스톱워치와 타이머">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:image" content="https://example.com/preview.png">
+    
+    <!-- 트위터 카드 -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="무료 스톱워치 & 타이머">
+    <meta name="twitter:description" content="간편하게 사용하는 스톱워치와 타이머">
+    <meta name="twitter:image" content="https://example.com/preview.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 50px;
+            margin-top: 30px;
+        }
+
+        .tab {
+            width: 180px;
+            height: 70px;
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6B66FF;
+            background: white;
+            border: 3px solid transparent;
+        }
+
+        .tab.active {
+            background: #6B66FF;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(107, 102, 255, 0.4);
+        }
+
+        .tab.inactive {
+            background: transparent;
+            color: white;
+            border: none;
+        }
+
+        .content-container {
+            background: white;
+            border-radius: 30px;
+            padding: 60px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            min-width: 400px;
+            max-width: 600px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: calc(60px + 3mm);
+            padding-bottom: calc(60px - 3mm);
+            position: relative;
+        }
+
+        .visitor-counter {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 0.9em;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .visitor-counter span {
+            color: #6B66FF;
+        }
+
+        .settings-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #6B66FF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            z-index: 10;
+            padding: 10px;
+        }
+
+        .settings-btn:hover {
+            background: #5a56e0;
+            transform: scale(1.1);
+        }
+
+        .menu-line {
+            width: 20px;
+            height: 2.5px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        .settings-menu {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            overflow: hidden;
+            z-index: 20;
+        }
+
+        .settings-menu.show {
+            display: block;
+        }
+
+        .settings-option {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+
+        .settings-option:hover {
+            background: #f0f4ff;
+        }
+
+        .settings-option:active {
+            background: #e0e8ff;
+        }
+
+        .timer-display {
+            font-size: 4em;
+            font-weight: bold;
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.05em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: #6B66FF;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a56e0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 102, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #A6A6A6;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #8f8f8f;
+            transform: translateY(-2px);
+        }
+
+        .btn-stop {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-stop:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .timer-input-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .time-input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-with-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .time-input {
+            width: 80px;
+            height: 80px;
+            font-size: 2em;
+            text-align: center;
+            border: 3px solid #6B66FF;
+            border-radius: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .time-input::-webkit-inner-spin-button,
+        .time-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .input-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .control-btn {
+            width: 30px;
+            height: 36px;
+            border: 2px solid #6B66FF;
+            background: white;
+            color: #6B66FF;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .control-btn:hover {
+            background: #6B66FF;
+            color: white;
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .time-label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: #5a56e0;
+            box-shadow: 0 0 10px rgba(107, 102, 255, 0.3);
+        }
+
+        .quick-add-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 0 10px;
+            max-width: 100%;
+        }
+
+        .quick-btn {
+            padding: 10px 16px;
+            border: 2px solid #6B66FF;
+            background: white;
+            color: #6B66FF;
+            border-radius: 20px;
+            font-size: 1.05em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 1;
+        }
+
+        .quick-btn:hover {
+            background: #6B66FF;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .quick-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            text-align: center;
+            color: #999;
+            font-size: 0.95em;
+            margin-top: 15px;
+            min-height: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .laps-container {
+            margin-top: 30px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .lap-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 12px 20px;
+            background: #f8f8f8;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .lap-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 12px 20px;
+            font-weight: bold;
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .lap-number {
+            color: #6B66FF;
+            font-weight: bold;
+        }
+
+        .lap-number:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+        .lap-name-input {
+            background: transparent;
+            border: none;
+            color: #6B66FF;
+            font-weight: bold;
+            font-size: 1em;
+            text-align: center;
+            width: 100%;
+            font-family: inherit;
+            padding: 4px;
+        }
+
+        .lap-name-input:focus {
+            outline: none;
+            background: rgba(107, 102, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .lap-time {
+            font-variant-numeric: tabular-nums;
+        }
+
+        @media (max-width: 768px) {
+            .tabs-container {
+                gap: 20px;
+            }
+
+            .tab {
+                width: 150px;
+                height: 60px;
+                border-radius: 30px;
+                font-size: 1.1em;
+            }
+
+            .content-container {
+                min-width: auto;
+                padding: 40px 20px;
+            }
+
+            .timer-display {
+                font-size: 3em;
+            }
+
+            .time-input {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8em;
+            }
+
+            .control-btn {
+                width: 26px;
+                height: 32px;
+                font-size: 0.8em;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 1em;
+                min-width: 100px;
+            }
+
+            .quick-btn {
+                padding: 8px 12px;
+                font-size: 0.8em;
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tab {
+                width: 130px;
+                height: 50px;
+                border-radius: 25px;
+                font-size: 1em;
+            }
+
+            .timer-display {
+                font-size: 2.5em;
+            }
+
+            .time-input {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5em;
+            }
+
+            .control-btn {
+                width: 24px;
+                height: 28px;
+                font-size: 0.75em;
+            }
+
+            .quick-btn {
+                padding: 6px 10px;
+                font-size: 0.75em;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .quick-btn {
+                padding: 6px 8px;
+                font-size: 0.7em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tabs-container">
+        <div class="tab active" id="stopwatchTab" onclick="switchTab('stopwatch')">
+            스톱워치
+        </div>
+        <div class="tab inactive" id="timerTab" onclick="switchTab('timer')">
+            타이머
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="visitor-counter" id="visitorCounter">
+            👁️ 방문자: <span id="visitorCount">0</span>
+        </div>
+        <button class="settings-btn" onclick="toggleSettings()">
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+        </button>
+        <div class="settings-menu" id="settingsMenu">
+            <div class="settings-option" onclick="openSmallWindow()">작은창</div>
+            <div class="settings-option" onclick="openMediumWindow()">중간창</div>
+        </div>
+        
+        <!-- 스톱워치 섹션 -->
+        <div id="stopwatchSection">
+            <div class="timer-display" id="stopwatchDisplay">00:00:00</div>
+            <div class="controls">
+                <button class="btn btn-primary" id="stopwatchStartBtn" onclick="startStopwatch()">시작</button>
+                <button class="btn btn-secondary" id="stopwatchLapBtn" onclick="recordLap()" style="display: none;">기록</button>
+                <button class="btn btn-danger" id="stopwatchResetBtn" onclick="resetStopwatch()">초기화</button>
+            </div>
+            <div class="laps-container" id="lapsContainer">
+                <div class="lap-header" id="lapHeader" style="display: none;">
+                    <div>기록명</div>
+                    <div>구간기록</div>
+                    <div>전체 시간</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 타이머 섹션 -->
+        <div id="timerSection" class="hidden">
+            <div class="timer-input-container" id="timerInputs">
+                <div class="time-input-group">
+                    <div class="input-with-controls">
+                        <input type="number" class="time-input" id="hoursInput" min="0" max="23" value="0" placeholder="0">
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="incrementInput('hoursInput', 23)">▲</button>
+                            <div class="control-row">
+                                <button class="control-btn" onclick="decrementInput('hoursInput')">▼</button>
+                                <div class="time-label">시간</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="time-input-group">
+                    <div class="input-with-controls">
+                        <input type="number" class="time-input" id="minutesInput" min="0" max="59" value="0" placeholder="0">
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="incrementInput('minutesInput', 59)">▲</button>
+                            <div class="control-row">
+                                <button class="control-btn" onclick="decrementInput('minutesInput')">▼</button>
+                                <div class="time-label">분</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="time-input-group">
+                    <div class="input-with-controls">
+                        <input type="number" class="time-input" id="secondsInput" min="0" max="59" value="0" placeholder="0">
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="incrementInput('secondsInput', 59)">▲</button>
+                            <div class="control-row">
+                                <button class="control-btn" onclick="decrementInput('secondsInput')">▼</button>
+                                <div class="time-label">초</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="quick-add-buttons" id="quickAddButtons">
+                <button class="quick-btn" onclick="addTime(10)">+ 10초</button>
+                <button class="quick-btn" onclick="addTime(30)">+ 30초</button>
+                <button class="quick-btn" onclick="addTime(60)">+ 1분</button>
+                <button class="quick-btn" onclick="addTime(300)">+ 5분</button>
+                <button class="quick-btn" onclick="addTime(600)">+ 10분</button>
+                <button class="quick-btn" onclick="addTime(1800)">+ 30분</button>
+                <button class="quick-btn" onclick="addTime(3600)">+ 1시간</button>
+            </div>
+            <div class="timer-display hidden" id="timerDisplay">00:00:00</div>
+            <div class="controls">
+                <button class="btn btn-primary" id="timerStartBtn" onclick="startTimer()">시작</button>
+                <button class="btn btn-danger" id="timerResetBtn" onclick="resetTimer()">초기화</button>
+            </div>
+            <div class="error-message" id="timerError"></div>
+        </div>
+    </div>
+
+    <script>
+        // 방문자 수 관리
+        function updateVisitorCount() {
+            const today = new Date().toDateString();
+            const storedData = localStorage.getItem('visitorData');
+            
+            let visitorData = storedData ? JSON.parse(storedData) : { date: today, count: 0 };
+            
+            // 날짜가 바뀌었으면 리셋
+            if (visitorData.date !== today) {
+                visitorData = { date: today, count: 0 };
+            }
+            
+            // 방문자 수 증가
+            visitorData.count += 1;
+            
+            // 저장
+            localStorage.setItem('visitorData', JSON.stringify(visitorData));
+            
+            // 화면에 표시
+            document.getElementById('visitorCount').textContent = visitorData.count;
+        }
+
+        // 페이지 로드 시 방문자 수 업데이트
+        updateVisitorCount();
+
+        // 설정 메뉴 토글
+        function toggleSettings() {
+            const menu = document.getElementById('settingsMenu');
+            menu.classList.toggle('show');
+        }
+
+        // 팝업 창 참조 저장
+        let popupWindow = null;
+
+        // 현재 활성 탭 가져오기
+        function getCurrentTab() {
+            const stopwatchTab = document.getElementById('stopwatchTab');
+            if (stopwatchTab.classList.contains('active')) {
+                return 'stopwatch';
+            } else {
+                return 'timer';
+            }
+        }
+
+        // 작은창 열기
+        function openSmallWindow(){
+            if(popupWindow && !popupWindow.closed){
+                popupWindow.close();
+            }
+            const currentTab = getCurrentTab();
+            popupWindow = window.open(window.location.pathname + "?mode=small&tab=" + currentTab,"_blank","width=405,height=420");
+            toggleSettings(); // 메뉴 닫기
+        }
+
+        // 중간창 열기
+        function openMediumWindow(){
+            if(popupWindow && !popupWindow.closed){
+                popupWindow.close();
+            }
+            const currentTab = getCurrentTab();
+            popupWindow = window.open(window.location.pathname + "?mode=medium&tab=" + currentTab,"_blank","width=665,height=510");
+            toggleSettings(); // 메뉴 닫기
+        }
+
+        // URL 파라미터 확인 및 설정 버튼 숨기기
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get("mode");
+        const tab = params.get("tab");
+
+        if(mode === "small" || mode === "medium"){
+            const settingsBtn = document.querySelector(".settings-btn");
+            if(settingsBtn){
+                settingsBtn.style.display = "none";
+            }
+        }
+
+        // URL 파라미터에 tab이 있으면 해당 탭으로 전환
+        if(tab === "timer"){
+            switchTab('timer');
+        } else if(tab === "stopwatch"){
+            switchTab('stopwatch');
+        }
+
+        // 메뉴 외부 클릭 시 닫기
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('settingsMenu');
+            const btn = document.querySelector('.settings-btn');
+            if (!menu.contains(event.target) && !btn.contains(event.target)) {
+                menu.classList.remove('show');
+            }
+        });
+
+        // 스톱워치 변수
+        let stopwatchInterval = null;
+        let stopwatchTime = 0;
+        let stopwatchRunning = false;
+        let laps = [];
+
+        // 타이머 변수
+        let timerInterval = null;
+        let timerTime = 0;
+        let timerRunning = false;
+
+        // 탭 전환
+        function switchTab(tab) {
+            const stopwatchTab = document.getElementById('stopwatchTab');
+            const timerTab = document.getElementById('timerTab');
+            const stopwatchSection = document.getElementById('stopwatchSection');
+            const timerSection = document.getElementById('timerSection');
+
+            if (tab === 'stopwatch') {
+                stopwatchTab.classList.add('active');
+                stopwatchTab.classList.remove('inactive');
+                timerTab.classList.remove('active');
+                timerTab.classList.add('inactive');
+                stopwatchSection.classList.remove('hidden');
+                timerSection.classList.add('hidden');
+            } else {
+                timerTab.classList.add('active');
+                timerTab.classList.remove('inactive');
+                stopwatchTab.classList.remove('active');
+                stopwatchTab.classList.add('inactive');
+                timerSection.classList.remove('hidden');
+                stopwatchSection.classList.add('hidden');
+            }
+        }
+
+        // 시간 포맷팅
+        function formatTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            const milliseconds = Math.floor((ms % 1000) / 10);
+
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // 스톱워치 시작/정지
+        function startStopwatch() {
+            const startBtn = document.getElementById('stopwatchStartBtn');
+            const lapBtn = document.getElementById('stopwatchLapBtn');
+
+            if (!stopwatchRunning) {
+                stopwatchRunning = true;
+                startBtn.textContent = '정지';
+                startBtn.classList.remove('btn-primary');
+                startBtn.classList.add('btn-stop');
+                lapBtn.style.display = 'inline-block';
+
+                const startTime = Date.now() - stopwatchTime;
+                stopwatchInterval = setInterval(() => {
+                    stopwatchTime = Date.now() - startTime;
+                    document.getElementById('stopwatchDisplay').textContent = formatTime(stopwatchTime);
+                }, 10);
+            } else {
+                stopwatchRunning = false;
+                startBtn.textContent = '계속';
+                startBtn.classList.remove('btn-stop');
+                startBtn.classList.add('btn-primary');
+                clearInterval(stopwatchInterval);
+            }
+        }
+
+        // 랩 기록
+        function recordLap() {
+            if (stopwatchRunning) {
+                const previousLapTime = laps.length > 0 ? laps[laps.length - 1].totalTime : 0;
+                const lapTime = stopwatchTime - previousLapTime;
+                
+                const lapData = {
+                    totalTime: stopwatchTime,
+                    lapTime: lapTime,
+                    name: `${String(laps.length + 1).padStart(2, '0')}`
+                };
+                laps.push(lapData);
+                
+                // Show header if first lap
+                if (laps.length === 1) {
+                    document.getElementById('lapHeader').style.display = 'grid';
+                }
+                
+                const lapsContainer = document.getElementById('lapsContainer');
+                const lapIndex = laps.length - 1;
+                const lapItem = document.createElement('div');
+                lapItem.className = 'lap-item';
+                lapItem.innerHTML = `
+                    <input type="text" class="lap-name-input" value="${lapData.name}" onblur="saveLapName(${lapIndex}, this.value)" onkeypress="if(event.key==='Enter') this.blur()">
+                    <span class="lap-time">${formatTime(lapData.lapTime)}</span>
+                    <span class="lap-time">${formatTime(lapData.totalTime)}</span>
+                `;
+                // Insert after header
+                const header = document.getElementById('lapHeader');
+                lapsContainer.insertBefore(lapItem, header.nextSibling);
+            }
+        }
+
+        // 기록 이름 저장
+        function saveLapName(index, newName) {
+            if (newName.trim() !== '') {
+                laps[index].name = newName.trim();
+            }
+        }
+
+        // 기록 목록 업데이트
+        function updateLapsDisplay() {
+            const lapsContainer = document.getElementById('lapsContainer');
+            const header = document.getElementById('lapHeader');
+            
+            // Remove all lap items except header
+            while (lapsContainer.children.length > 1) {
+                lapsContainer.removeChild(lapsContainer.lastChild);
+            }
+            
+            if (laps.length === 0) {
+                header.style.display = 'none';
+                return;
+            }
+            
+            header.style.display = 'grid';
+            
+            for (let i = laps.length - 1; i >= 0; i--) {
+                const lapItem = document.createElement('div');
+                lapItem.className = 'lap-item';
+                lapItem.innerHTML = `
+                    <input type="text" class="lap-name-input" value="${laps[i].name}" onblur="saveLapName(${i}, this.value)" onkeypress="if(event.key==='Enter') this.blur()">
+                    <span class="lap-time">${formatTime(laps[i].lapTime)}</span>
+                    <span class="lap-time">${formatTime(laps[i].totalTime)}</span>
+                `;
+                lapsContainer.appendChild(lapItem);
+            }
+        }
+
+        // 스톱워치 초기화
+        function resetStopwatch() {
+            clearInterval(stopwatchInterval);
+            stopwatchTime = 0;
+            stopwatchRunning = false;
+            laps = [];
+            document.getElementById('stopwatchDisplay').textContent = '00:00:00';
+            document.getElementById('stopwatchStartBtn').textContent = '시작';
+            document.getElementById('stopwatchStartBtn').classList.remove('btn-stop');
+            document.getElementById('stopwatchStartBtn').classList.add('btn-primary');
+            document.getElementById('stopwatchLapBtn').style.display = 'none';
+            document.getElementById('lapHeader').style.display = 'none';
+            document.getElementById('lapsContainer').innerHTML = '<div class="lap-header" id="lapHeader" style="display: none;"><div>기록명</div><div>구간기록</div><div>전체 시간</div></div>';
+        }
+
+        // 입력값 증가
+        function incrementInput(inputId, max) {
+            const input = document.getElementById(inputId);
+            let value = parseInt(input.value) || 0;
+            if (value < max) {
+                input.value = value + 1;
+            }
+        }
+
+        // 입력값 감소
+        function decrementInput(inputId) {
+            const input = document.getElementById(inputId);
+            let value = parseInt(input.value) || 0;
+            if (value > 0) {
+                input.value = value - 1;
+            }
+        }
+
+        // 타이머에 시간 추가
+        function addTime(seconds) {
+            let currentHours = parseInt(document.getElementById('hoursInput').value) || 0;
+            let currentMinutes = parseInt(document.getElementById('minutesInput').value) || 0;
+            let currentSeconds = parseInt(document.getElementById('secondsInput').value) || 0;
+
+            let totalSeconds = currentHours * 3600 + currentMinutes * 60 + currentSeconds + seconds;
+
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const secs = totalSeconds % 60;
+
+            document.getElementById('hoursInput').value = Math.min(hours, 23);
+            document.getElementById('minutesInput').value = minutes;
+            document.getElementById('secondsInput').value = secs;
+            document.getElementById('timerError').textContent = '';
+        }
+
+        // 타이머 시작/정지
+        function startTimer() {
+            const startBtn = document.getElementById('timerStartBtn');
+            const inputsContainer = document.getElementById('timerInputs');
+            const quickAddButtons = document.getElementById('quickAddButtons');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const errorMessage = document.getElementById('timerError');
+
+            if (!timerRunning) {
+                // 입력값 가져오기
+                if (timerTime === 0) {
+                    const hours = parseInt(document.getElementById('hoursInput').value) || 0;
+                    const minutes = parseInt(document.getElementById('minutesInput').value) || 0;
+                    const seconds = parseInt(document.getElementById('secondsInput').value) || 0;
+                    timerTime = (hours * 3600 + minutes * 60 + seconds) * 1000;
+
+                    if (timerTime === 0) {
+                        errorMessage.textContent = '시간을 설정해주세요.';
+                        return;
+                    }
+                }
+
+                errorMessage.textContent = '';
+                timerRunning = true;
+                startBtn.textContent = '정지';
+                startBtn.classList.remove('btn-primary');
+                startBtn.classList.add('btn-stop');
+                inputsContainer.classList.add('hidden');
+                quickAddButtons.classList.add('hidden');
+                timerDisplay.classList.remove('hidden');
+
+                const startTime = Date.now();
+                const endTime = startTime + timerTime;
+
+                timerInterval = setInterval(() => {
+                    timerTime = endTime - Date.now();
+                    
+                    if (timerTime <= 0) {
+                        timerTime = 0;
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        startBtn.textContent = '시작';
+                        startBtn.classList.remove('btn-danger');
+                        startBtn.classList.add('btn-primary');
+                        document.getElementById('timerDisplay').textContent = '00:00:00';
+                        alert('⏰ 타이머가 종료되었습니다!');
+                        playSound();
+                    } else {
+                        document.getElementById('timerDisplay').textContent = formatTime(timerTime);
+                    }
+                }, 10);
+            } else {
+                timerRunning = false;
+                startBtn.textContent = '계속';
+                startBtn.classList.remove('btn-stop');
+                startBtn.classList.add('btn-primary');
+                clearInterval(timerInterval);
+            }
+        }
+
+        // 타이머 초기화
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerTime = 0;
+            timerRunning = false;
+            document.getElementById('timerDisplay').textContent = '00:00:00';
+            document.getElementById('timerStartBtn').textContent = '시작';
+            document.getElementById('timerStartBtn').classList.remove('btn-stop');
+            document.getElementById('timerStartBtn').classList.add('btn-primary');
+            document.getElementById('timerInputs').classList.remove('hidden');
+            document.getElementById('quickAddButtons').classList.remove('hidden');
+            document.getElementById('timerDisplay').classList.add('hidden');
+            document.getElementById('timerError').textContent = '';
+            document.getElementById('hoursInput').value = '0';
+            document.getElementById('minutesInput').value = '0';
+            document.getElementById('secondsInput').value = '0';
+        }
+
+        // 알림 소리
+        function playSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // 입력값 제한
+        document.getElementById('hoursInput').addEventListener('input', function() {
+            if (this.value > 23) this.value = 23;
+            if (this.value < 0) this.value = 0;
+            document.getElementById('timerError').textContent = '';
+        });
+
+        document.getElementById('minutesInput').addEventListener('input', function() {
+            if (this.value > 59) this.value = 59;
+            if (this.value < 0) this.value = 0;
+            document.getElementById('timerError').textContent = '';
+        });
+
+        document.getElementById('secondsInput').addEventListener('input', function() {
+            if (this.value > 59) this.value = 59;
+            if (this.value < 0) this.value = 0;
+            document.getElementById('timerError').textContent = '';
+        });
+    </script>
+    
+    <!-- 검색 엔진 최적화를 위한 숨겨진 콘텐츠 -->
+    <div style="display: none;">
+        <h1>무료 온라인 스톱워치 타이머</h1>
+        <p>무료로 사용할 수 있는 온라인 스톱워치와 타이머입니다. 공부 시간 측정, 운동 인터벌 타이머, 요리 시간 재기에 완벽합니다.</p>
+        <p>주요 기능: 스톱워치 기록 저장, 구간 측정, 타이머 빠른 설정, 작은창 모드, 중간창 모드, 방문자 카운터</p>
+        <p>스톱워치로 랩타임을 측정하고, 타이머로 정확한 시간을 설정하세요. 모바일과 데스크톱 모두 지원합니다.</p>
+    </div>
+</body>
+</html>
